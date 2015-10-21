@@ -1,6 +1,7 @@
-# map2cmdb
-this is a couple scripts I am working on to crawl through a Qualys Map spreadsheet and a CMDB spreadsheet, 
-  and compare entries for asset management.  
+# map2cmdb  ***Bare with me, I just started learning python 2 weeks ago, so my code is not pretty, but it works!***
+
+
+Couple of scripts I am working on to crawl through a Qualys Map and a CMDB spreadsheet, and compare entries for asset management.  It will eventually connect to the Qualys API, create new tags (if need be), and add tags to assets based on owner in the CMDB.  It also creates a list of assets that are not in the CMDB (or are missing info) to turn over to asset management.
 
 It will eventually connect to the Qualys API, create new tags (if need be), and add tags to assets based on owner in the CMDB
 
@@ -19,3 +20,6 @@ It will eventually connect to the Qualys API, create new tags (if need be), and 
 3.1.	The scripts call for the book ‘outTest.xlsx’ , it is probably easiest to save the book as this.  If you change the name of this book (or any of the books or sheet names), than you will have to modify the code to point to the proper book/sheet.
 4.	Make sure all scripts and excel books are in the same working directory.
 5.	Run map2assets.py  
+
+
+**** also, the reason for 3 scripts is because each does a different function that I will sometimes use individually.  If you want to do the same, then comment out the last few lines that call for the next script to open ****
