@@ -3,6 +3,9 @@
 
 Couple of scripts I am working on to crawl through a Qualys Map and a CMDB spreadsheet, and compare entries for asset management.  It will eventually connect to the Qualys API, create new tags (if need be), and add tags to assets based on owner in the CMDB.  It also creates a list of assets that are not in the CMDB (or are missing info) to turn over to asset management.
 
+* it does not work perfectly, such as when comparing Ip 2 IP it will match 255.255.255.13 with 255.255.255.139 *
+* 
+
 It will eventually connect to the Qualys API, create new tags (if need be), and add tags to assets based on owner in the CMDB
 
 1.	Open Asset Inventory CSV, save to Documents as ‘assetTest.xlsx’
