@@ -69,8 +69,9 @@ mapIP = maP.get_sheet_by_name('IPs') #make sure that sheets are named correctly
 assetSheet = asset.get_sheet_by_name('Assets')
 
 #variable top store the highest row number
-mRow = str(mapIP.get_highest_row()) 
+mRow = str(mapIP.get_highest_row())
 eRow = str(assetSheet.get_highest_row())
+
 
 i = 2 #variable for row number output, skips the first row (b/c it is the header row, duh)
 
@@ -79,7 +80,7 @@ for mapIpRow in mapIP['A1':'A' + mRow]:
 		for mapIpCell in mapIpRow:
 			for assetIpRow in assetSheet['E1':'E' + eRow]:
 				for assetIpCell in assetIpRow:
-					assetIp = str(assetIpCell.value)
+					assetIp = assetIpCell.value.split('\n') if assetIpCell.value else ''
 					mapIp = str(mapIpCell.value)
 					if mapIp in assetIp:
 						outSheet['A' + str(i)].value = mapIp
@@ -112,7 +113,9 @@ for dnsRow in mapIP['B1':'B' + mRow]:
 		for dnsCell in dnsRow:
 			for ciNameRow in assetSheet['B1':'B' + eRow]:
 				for ciNameCell in ciNameRow:
-					if dnsCell.value is not None and str(dnsCell.value) in str(ciNameCell.value):
+					ciName = ciNameCell.value.split() if ciNameCell.value else ''   
+					dnsName = str(dnsCell.value)
+					if dnsName in ciName: 
 						mapIp = mapIP['A' + str(dnsCell.row)].value
 						dnsM = mapIP['B' + str(dnsCell.row)].value
 						owner = assetSheet['F' + str(ciNameCell.row)].value
@@ -143,7 +146,9 @@ for dnsRow in mapIP['B1':'B' + mRow]:
 		for dnsCell in dnsRow:
 			for ciAliasRow in assetSheet['C1':'C' + eRow]:
 				for ciAliasCell in ciAliasRow:
-					if dnsCell.value is not None and str(dnsCell.value) in str(ciAliasCell.value):
+					ciAlias = ciAliasCell.value.split() if ciAliasCell.value else ''   
+					dnsName = str(dnsCell.value)
+					if dnsName in ciAlias:
 						mapIp = mapIP['A' + str(dnsCell.row)].value
 						dnsM = mapIP['B' + str(dnsCell.row)].value
 						owner = assetSheet['F' + str(ciAliasCell.row)].value
@@ -175,7 +180,9 @@ for dnsRow in mapIP['B1':'B' + mRow]:
 		for dnsCell in dnsRow:
 			for ciDescRow in assetSheet['D1':'D' + eRow]:
 				for ciDescCell in ciDescRow:
-					if dnsCell.value is not None and str(dnsCell.value) in str(ciDescCell.value):
+					ciDesc = ciDescCell.value.split() if ciDescCell.value else ''   
+					dnsName = str(dnsCell.value)
+					if dnsName in ciDesc:
 						mapIp = mapIP['A' + str(dnsCell.row)].value
 						dnsM = mapIP['B' + str(dnsCell.row)].value
 						owner = assetSheet['F' + str(ciDescCell.row)].value
@@ -201,7 +208,7 @@ for dnsRow in mapIP['B1':'B' + mRow]:
 						pass
 
 print 'Map2Assets DONE' #feedback
-
+					
 out.save('outTest.xlsx')
 
 #launch next script, compare.py
