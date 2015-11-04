@@ -45,13 +45,17 @@ compareSheet['H1'] = 'CI ID'
 #create str variables of highest row #
 oRow = outSheet.get_highest_row()
 sRow = shortSheet.get_highest_row()
+aRow = aliasSheet.get_highest_row()
+dRow = descSheet.get_highest_row()
 cRow = compareSheet.get_highest_row()
 
 
 #variable for new row to be inserted into
-i = compareSheet.get_highest_row()
+i = cRow
 i = i + 1 #sjip the first line(b/c of headers, duh!)
 print i #curiousity + feedback
+
+compdict = {} # compare[dnsM]
 
 #print IP2IP sheet rows to COMPARE sheet
  #this does not need to be compared, because the COMPARE sheet is empty
@@ -64,6 +68,8 @@ for mapIpCell in range(2, (oRow + 1)):
 	dnsQ3 = outSheet['F' + str(mapIpCell)].value #ciDesc
 	ciIP = outSheet['G' + str(mapIpCell)].value #ciIP
 	ciID = outSheet['H' + str(mapIpCell)].value #ciID
+	
+	compdict.setdefault(str(dnsM)) #add dns to dictionary
 	compareSheet['A' + str(i)].value = mapIp
 	compareSheet['B' + str(i)].value = dnsM
 	compareSheet['C' + str(i)].value = owner
@@ -80,18 +86,21 @@ print i
 out.save('outTest.xlsx')
 print 'Comparing Short Sheet...'
 
-#if shortsheet [A] is not in IP2IP [A] sheet, print row to compare sheet 
+#if shortsheet [A] is not in compdict sheet, print row to compare sheet 
 for mIpCell in range(2, (sRow + 1)):		
 	#variables to add shortsheet data to compare sheet 
 	maIp = shortSheet['A' + str(mIpCell)].value
-	owner = shortSheet['C' + str(mIpCell)].value
 	dnsM = shortSheet['B' + str(mIpCell)].value
+	owner = shortSheet['C' + str(mIpCell)].value
 	dnsQ = shortSheet['D' + str(mIpCell)].value #cishort
 	dnsQ2 = shortSheet['E' + str(mIpCell)].value #cialias
 	dnsQ3 = shortSheet['F' + str(mIpCell)].value #ciDesc
 	ciIP = shortSheet['G' + str(mIpCell)].value #ciIP
 	ciID = shortSheet['H' + str(mIpCell)].value #ciID
-	if str(mIpCell) not in range(2, (oRow)):
+	if str(dnsQ) in compdict:
+		pass
+	else:
+		compdict.setdefault(str(dnsQ)) #add dns to dictionary
 		compareSheet['A' + str(i)].value = maIp
 		compareSheet['B' + str(i)].value = dnsM
 		compareSheet['C' + str(i)].value = owner
@@ -100,7 +109,7 @@ for mIpCell in range(2, (sRow + 1)):
 		compareSheet['F' + str(i)].value = dnsQ3
 		compareSheet['G' + str(i)].value = ciIP
 		compareSheet['H' + str(i)].value = ciID
-		print(maIp + 'added')
+		print(dnsQ + 'added')
 		i = i + 1	
 
 
@@ -110,65 +119,70 @@ out.save('outTest.xlsx')
 
 ###################
 #if alias [A] is not in COMPARE [A] sheet, print row to compare sheet 
-for mapIpRow in aliasSheet['A2':('A' + str(aliasSheet.get_highest_row()))]:
-	for mapIpCell in mapIpRow:
-				mapIp = str(mapIpCell.value)
-				if mapIp in compareSheet['A2' : ('A' + str(compareSheet.get_highest_row()))]:		
-					pass
-				else:
-					#add IP data to compare sheet 
-					compareSheet['A' + str(i)].value = mapIp
-					dnsM = aliasSheet['B' + str(mapIpCell.row)].value #mapdns
-					owner = aliasSheet['C' + str(mapIpCell.row)].value
-					dnsQ = aliasSheet['D' + str(mapIpCell.row)].value #cishort
-					dnsQ2 = aliasSheet['E' + str(mapIpCell.row)].value #cialias
-					dnsQ3 = aliasSheet['F' + str(mapIpCell.row)].value #ciDesc
-					ciIP = aliasSheet['G' + str(mapIpCell.row)].value #ciIP
-					ciID = aliasSheet['H' + str(mapIpCell.row)].value #ciID
-					compareSheet['B' + str(i)].value = dnsM
-					compareSheet['C' + str(i)].value = owner
-					compareSheet['D' + str(i)].value = dnsQ
-					compareSheet['E' + str(i)].value = dnsQ2
-					compareSheet['F' + str(i)].value = dnsQ3
-					compareSheet['G' + str(i)].value = ciIP
-					compareSheet['H' + str(i)].value = ciID
-					print mapIp 
-					i = i + 1	
+for mapIpCell in range(2, (aRow + 1)):
+	mapIp = aliasSheet['A' + str(mapIpCell)].value 
+	dnsM = aliasSheet['B' + str(mapIpCell)].value #mapdns
+	owner = aliasSheet['C' + str(mapIpCell)].value
+	dnsQ = aliasSheet['D' + str(mapIpCell)].value #cishort
+	dnsQ2 = aliasSheet['E' + str(mapIpCell)].value #cialias
+	dnsQ3 = aliasSheet['F' + str(mapIpCell)].value #ciDesc
+	ciIP = aliasSheet['G' + str(mapIpCell)].value #ciIP
+	ciID = aliasSheet['H' + str(mapIpCell)].value #ciID	
+	if str(dnsQ2) in compdict:		
+		pass
+	else:
+		compdict.setdefault(str(dnsQ2)) #add dns to dictionary
+		#add IP data to compare sheet 
+		compareSheet['A' + str(i)].value = mapIp
+		compareSheet['B' + str(i)].value = dnsM
+		compareSheet['C' + str(i)].value = owner
+		compareSheet['D' + str(i)].value = dnsQ
+		compareSheet['E' + str(i)].value = dnsQ2
+		compareSheet['F' + str(i)].value = dnsQ3
+		compareSheet['G' + str(i)].value = ciIP
+		compareSheet['H' + str(i)].value = ciID
+		print dnsQ2 
+		i = i + 1	
 print''
 out.save('outTest.xlsx')
 			
 #if descsheet [A] is not in COMPARE [A] sheet, print row to compare sheet 
-for mIpRow in descSheet['A2':('A' + str(descSheet.get_highest_row()))]:
-	for mIpCell in mIpRow:
-		mIp = str(mIpCell.value)
-		if mIp in compareSheet['A2' : ('A' + str(compareSheet.get_highest_row()))]:	
-			pass
-		else:		
-			#add IP data to compare sheet 
-			compareSheet['A' + str(i)].value = mIp
-			dnsM = descSheet['B' + str(mIpCell.row)].value
-			owner = descSheet['C' + str(mIpCell.row)].value
-			dnsQ = descSheet['D' + str(mIpCell.row)].value #cishort
-			dnsQ2 = descSheet['E' + str(mIpCell.row)].value #cialias
-			dnsQ3 = descSheet['F' + str(mIpCell.row)].value #ciDesc
-			ciIP = descSheet['G' + str(mIpCell.row)].value #ciIP
-			ciID = descSheet['H' + str(mIpCell.row)].value #ciID
-			compareSheet['B' + str(i)].value = dnsM
-			compareSheet['C' + str(i)].value = owner
-			compareSheet['D' + str(i)].value = dnsQ
-			compareSheet['E' + str(i)].value = dnsQ2
-			compareSheet['F' + str(i)].value = dnsQ3
-			compareSheet['G' + str(i)].value = ciIP
-			compareSheet['H' + str(i)].value = ciID
-			print mIp
-			i = i + 1	
+for mIpCell in range(2, (dRow + 1)):
+	mIp = descSheet['A' + str(mIpCell)].value
+	dnsM = descSheet['B' + str(mIpCell)].value
+	owner = descSheet['C' + str(mIpCell)].value
+	dnsQ = descSheet['D' + str(mIpCell)].value #cishort
+	dnsQ2 = descSheet['E' + str(mIpCell)].value #cialias
+	dnsQ3 = descSheet['F' + str(mIpCell)].value #ciDesc
+	ciIP = descSheet['G' + str(mIpCell)].value #ciIP
+	ciID = descSheet['H' + str(mIpCell)].value #ciID
+	
+	if dnsQ3 in compdict:	
+		pass
+	else:	
+		compdict.setdefault(str(dnsQ3)) #add dns to dictionary	
+		#add IP data to compare sheet 
+		compareSheet['A' + str(i)].value = mIp
+		compareSheet['B' + str(i)].value = dnsM
+		compareSheet['C' + str(i)].value = owner
+		compareSheet['D' + str(i)].value = dnsQ
+		compareSheet['E' + str(i)].value = dnsQ2
+		compareSheet['F' + str(i)].value = dnsQ3
+		compareSheet['G' + str(i)].value = ciIP
+		compareSheet['H' + str(i)].value = ciID
+		print dnsQ3
+		i = i + 1	
 
 print 'done' 
 			
 out.save('outTest.xlsx')
-#launch next script, compare.py
 
+
+#launch next script, noMatch2compare.py
 subprocess.Popen(['/usr/bin/python', 'noMatch2compare.py'])
 print "TOTALLY DONE"
 out.save('outTest.xlsx')
+
+
 print '     ***** Unicorn Fantastic! You did it! *****'			
+
