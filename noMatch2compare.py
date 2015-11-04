@@ -72,8 +72,7 @@ for mapIpRow in checkSheet['A2':('A' + kRow)]:
 			checkSheet['B' + str(i)].value = mapIp
 			i = i +1
 		print mapIp
-		
-			
+
 print ''		
 
 i = 2
@@ -87,38 +86,43 @@ for row in range(2, checkSheet.get_highest_row() + 1):
 
 	checkdict.setdefault(str(chkIP)) 
 
-print checkdict
+print 'dict filled \n'
 
 for mapIpRow in range(2, mapIP.get_highest_row()):
-	mapIp = mapIP.cell(row=mapIpRow, column=1).value
-	dnsM = mapIP.cell(row=mapIpRow, column=2).value
+	mapIp = mapIP['A' + str(mapIpRow)].value
+	dnsM = mapIP['B' + str(mapIpRow)].value
 	if mapIp in checkdict:
 		pass
 	else:
+		print mapIp
 		matchSheet['A' + str(i)].value = mapIp
-		matchSheet['B' + str(i)].value = dnsM
-		
-		#if IP in noIPmatch sheet is in COMPARE sheet, add details.  else: i+=1		
-		for compareIpRow in range(2, compareSheet.get_highest_row()):
-			compareIp = compareSheet.cell(row=compareIpRow, column=1).value
-			if str(compareIp) in str(mapIp):
-				
-				owner = compareSheet['C' + str(compareIpRow)].value
-				dnsQ = compareSheet['D' + str(compareIpRow)].value
-				dnsQ2 = compareSheet['E' + str(compareIpRow)].value
-				dnsQ3 = compareSheet['F' + str(compareIpRow)].value
-				ciIP = compareSheet['G' + str(compareIpRow)].value
-				ciID = compareSheet['H' + str(compareIpRow)].value
-	
-				
-				matchSheet['C' + str(i)].value = owner
-				matchSheet['D' + str(i)].value = dnsQ
-				matchSheet['E' + str(i)].value = dnsQ2
-				matchSheet['F' + str(i)].value = dnsQ3
-				matchSheet['G' + str(i)].value = ciIP
-				matchSheet['H' + str(i)].value = ciID
-		
+		matchSheet['B' + str(i)].value = dnsM	
 		i = i + 1
+		
+i = 2
+matRow = str(matchSheet.get_highest_row())
+#if IP in noIPmatch sheet is in COMPARE sheet, add details.  else: i+=1		
+for matchIpRow in matchSheet['A1':'A' + matRow]:
+	for matchIP in matchIpRow:
+		for compareIp in compareSheet['A1':'A' + cRow]:
+			for compIP in compareIp:
+				matchIp = str(matchIP.value)
+				coIP = str(compIP.value)
+				if matchIp in coIP:
+					owner = compareSheet['C' + str(compIP.row)].value
+					dnsQ = compareSheet['D' + str(compIP.row)].value
+					dnsQ2 = compareSheet['E' + str(compIP.row)].value
+					dnsQ3 = compareSheet['F' + str(compIP.row)].value
+					ciIP = compareSheet['G' + str(compIP.row)].value
+					ciID = compareSheet['H' + str(compIP.row)].value
+								
+					matchSheet['C' + str(matchIP.row)].value = owner
+					matchSheet['D' + str(matchIP.row)].value = dnsQ
+					matchSheet['E' + str(matchIP.row)].value = dnsQ2
+					matchSheet['F' + str(matchIP.row)].value = dnsQ3
+					matchSheet['G' + str(matchIP.row)].value = ciIP
+					matchSheet['H' + str(matchIP.row)].value = ciID
+					i = i + 1
 	
 print ''		
 
